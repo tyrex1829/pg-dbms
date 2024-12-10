@@ -1,19 +1,18 @@
 import { Client } from "pg";
+import env from "dotenv";
+env.config();
 
-async function insertToDb() {
-  const client = new Client({
-    host: "localhost",
-    port: 5432,
-    database: "postgres",
-    user: "new user",
-    password: "mysecretpassword",
-  });
+const client = new Client({
+  connectionString: process.env.DBSTRING,
+});
 
+async function insertToDb(username: string, email: string, password: string) {
   try {
     await client.connect();
     const insertQuery =
-      "INSERT INTO users (username, email, password) VALUES ('username1', 'user2@example.com', 'user_password');";
-    const res = await client.query(insertQuery);
+      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3);";
+    const values = [username, email, password];
+    const res = await client.query(insertQuery, values);
     console.log(`Insert Successful ${res}`);
   } catch (error) {
     console.error(`Error during insert: ${error}`);
@@ -22,4 +21,4 @@ async function insertToDb() {
   }
 }
 
-insertToDb();
+insertToDb("username2", "user2@example.com", "user2password");
