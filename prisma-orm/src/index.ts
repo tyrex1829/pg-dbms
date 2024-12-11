@@ -40,8 +40,20 @@ async function updateUser(
   console.log(res);
 }
 
-insertUser("user1", "user1_password", "user1name", "user1lastname");
-updateUser("user1", {
-  firstName: "user1nameee",
-  secondName: "user1lastnameee",
-});
+async function findUser(username: string) {
+  const res = await prisma.user.findFirst({
+    where: {
+      username: username,
+    },
+  });
+  console.log(res);
+}
+
+// insertUser("user1", "user1_password", "user1name", "user1lastname");
+
+// updateUser("user1", {
+//   firstName: "user1nameee",
+//   secondName: "user1lastnameee",
+// });
+
+findUser("user1");
